@@ -1,0 +1,106 @@
+<script type="text/x-red" data-template-name="Dc Motor">
+
+	<div class="form-row">
+		<label for="node-input-board">
+			<i class="fa fa-tasks"></i> Board
+		</label>
+		<input type="text" id="node-input-board">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-name">
+			<i class="fa fa-tag"></i> Name
+		</label>
+		<input type="text" id="node-input-name" placeholder="Motor label">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-pinA">
+			<i class="fa fa-map-pin"></i> PinA
+		</label>
+		<input type="text" id="node-input-pinA" placeholder="13">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-pinB">
+			<i class="fa fa-map-pin"></i> PinB
+		</label>
+		<input type="text" id="node-input-pinB" placeholder="12">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-pinE">
+			<i class="fa fa-map-pin"></i> Enable Pin
+		</label>
+		<input type="text" id="node-input-pinE" placeholder="03">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-speed">
+			<i class="fa fa-tag"></i> Speed
+		</label>
+		<input type="null" id="node-input-speed" placeholder="20">
+	</div>
+
+</script>
+
+<script type="text/x-red" data-help-name="Dc Motor">
+	<p>
+		A node to actuate DcMotor,using johnny-five I/O Plugins.
+	</p>
+	<p>
+		Inputs to Nodes:
+	</p>
+	<p>
+		"1" for ClockWise Rotation of Dc Motor.
+	</p>
+	<p>
+		"-1" for ClockWise Rotation of Dc Motor.
+	</p>
+	<p>
+		"0" to stop
+	</p>
+</script>
+
+<script type="text/javascript">
+	RED.nodes.registerType('Dc Motor', {
+		category: 'Snappy Logic',
+		defaults: {
+			name: {
+				value: ""
+			},
+			pinA: {
+				value: null,
+				required: true
+			},
+			pinB: {
+				value: null,
+				required: true
+			},
+			pinE: {
+				value: null,
+				required: true
+			},
+			speed: {
+				value: 50,
+				required: false
+			},
+
+			outputs: {
+				value: 0
+			},
+			board: {
+				type: "nodebot",
+				required: true
+			}
+		},
+		color: "#2E86C1",
+		inputs: 1,
+		outputs: 0,
+		icon: "dc_motor.png",
+		align: "right",
+		label: function() {
+			return this.name || "Dc Motor : " + this.pinA + "_" + this.pinB;
+		}
+	});
+</script>
