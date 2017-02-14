@@ -1,21 +1,26 @@
 var helper = require('../helper.js');
+
+const debug = require('debug')('SnappyIONodes:dc_motor_spec');
+
+debug(__dirname)
+
 var nodebotNode = require('../../data/nodebotNode.js')
-describe('load cong-nodbot', function() {
-  before(function(done) {
+
+describe('load Config node-bot', function () {
+  before(function (done) {
 
     helper.startServer(done);
   });
 
-  afterEach(function() {
+  afterEach(function () {
     helper.unload();
   });
 
-
-  it('can be loaded without credentials', function(done) {
+  it('can be loaded without credentials', function (done) {
     helper.load(nodebotNode, [{
       id: "n1",
       type: "nodebot"
-    }], function() {
+    }], function () {
       var n1 = helper.getNode("n1");
       //n1.should.have.property('id', 'n1');
       //(typeof n1.AWS).should.be.equal("undefined");
@@ -41,7 +46,7 @@ describe('load cong-nodbot', function() {
   //   });
   // });
 
-  it('can be loaded with credentials', function(done) {
+  it('can be loaded with credentials', function (done) {
     helper.load(nodebotNode, [{
       id: "n1",
       type: "nodebot"
@@ -52,7 +57,7 @@ describe('load cong-nodbot', function() {
       //        "connectionType" = "local"
       //     }
 
-    }, function() {
+    }, function () {
       var n1 = helper.getNode("n1");
       //n1.should.have.property('id', 'n1');
       //(typeof n1.AWS).should.not.be.equal("undefined");

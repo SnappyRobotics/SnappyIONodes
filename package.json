@@ -44,9 +44,13 @@
     "gulp": "^3.9.1",
     "gulp-mocha": "^3.0.1",
     "gulp-util": "^3.0.8",
+    "johnny-five": "^0.10.6",
     "mock-firmata": "^0.1.0",
     "nodemon": "^1.11.0",
     "nodered_container": "^2.0.50",
     "sinon": "^1.17.7"
+  },
+  "devDependencies": {
+    "firmata": "^0.15.0"
   }
 }
