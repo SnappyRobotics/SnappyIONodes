@@ -4,9 +4,9 @@
   "description": "Node red nodes for io for snappy",
   "main": "index.js",
   "scripts": {
-    "installRED": "DEBUG=NodeRed_Container:*,SnappyLogicNodes:* gulp installRED",
-    "serve": "DEBUG=NodeRed_Container:*,SnappyLogicNodes:* nodemon run.js",
-    "test": "DEBUG=SnappyLogicNodes:* gulp mocha"
+    "installRED": "DEBUG=NodeRed_Container:*,SnappyIONodes:* gulp installRED",
+    "serve": "DEBUG=NodeRed_Container:*,SnappyIONodes:* nodemon run.js",
+    "test": "DEBUG=SnappyIONodes:* gulp mocha"
   },
   "repository": {
     "type": "git",
@@ -36,5 +36,11 @@
   "bugs": {
     "url": "https://github.com/SnappyRobotics/SnappyIONodes/issues"
   },
-  "homepage": "https://github.com/SnappyRobotics/SnappyIONodes#readme"
+  "homepage": "https://github.com/SnappyRobotics/SnappyIONodes#readme",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^3.0.1",
+    "nodemon": "^1.11.0",
+    "nodered_container": "^2.0.50"
+  }
 }

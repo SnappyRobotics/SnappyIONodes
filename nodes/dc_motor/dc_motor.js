@@ -1,4 +1,4 @@
-const debug = require('debug')('SnappyLogicNodes:dc_motor');
+const debug = require('debug')('SnappyIONodes:dc_motor');
 
 function connectingStatus(n) {
   n.status({
