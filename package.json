@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/SnappyRobotics/SnappyIONodes#readme",
   "dependencies": {
+    "debug": "^2.6.1",
     "gulp": "^3.9.1",
     "gulp-mocha": "^3.0.1",
     "nodemon": "^1.11.0",
