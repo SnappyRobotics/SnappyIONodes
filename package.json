@@ -1,0 +1,40 @@
+{
+  "name": "node-red-contrib-snappyionodes",
+  "version": "1.0.0",
+  "description": "Node red nodes for io for snappy",
+  "main": "index.js",
+  "scripts": {
+    "installRED": "DEBUG=NodeRed_Container:*,SnappyLogicNodes:* gulp installRED",
+    "serve": "DEBUG=NodeRed_Container:*,SnappyLogicNodes:* nodemon run.js",
+    "test": "DEBUG=SnappyLogicNodes:* gulp mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SnappyRobotics/SnappyIONodes.git"
+  },
+  "keywords": [
+    "node",
+    "red",
+    "snappy",
+    "nodejs",
+    "js",
+    "robotics"
+  ],
+  "author": {
+    "name": "Adarsh Belavatagi",
+    "email": "adarsh.sb18@gmail.com",
+    "url": "https://github.com/Belavatagi"
+  },
+  "contributors": [
+    {
+      "name": "Prajankya Sonar",
+      "email": "contact@prajankya.me",
+      "url": "https://prajankya.me/"
+    }
+  ],
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/SnappyRobotics/SnappyIONodes/issues"
+  },
+  "homepage": "https://github.com/SnappyRobotics/SnappyIONodes#readme"
+}
