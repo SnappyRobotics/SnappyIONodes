@@ -1,4 +1,5 @@
 var helper = require('../helper.js');
+const bootstrap = require('../common/bootstrap')
 
 const debug = require('debug')('SnappyIONodes:dc_motor_spec');
 
@@ -8,7 +9,6 @@ var nodebotNode = require('../../data/nodebotNode.js')
 
 describe('load Config node-bot', function () {
   before(function (done) {
-
     helper.startServer(done);
   });
 
