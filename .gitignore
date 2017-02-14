@@ -38,3 +38,4 @@ jspm_packages
 
 /data/*
 !/data/.empty
+!/data/nodebotNode.js
