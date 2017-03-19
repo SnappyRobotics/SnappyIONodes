@@ -1,16 +1,16 @@
 {
-  "name": "node-red-contrib-snappyionodes",
-  "version": "1.0.0",
+  "name": "snappy-io-nodes",
+  "version": "0.3.162",
   "description": "Node red nodes for io for snappy",
   "main": "index.js",
   "scripts": {
-    "installRED": "DEBUG=NodeRed_Container:*,SnappyIONodes:* gulp installRED",
-    "serve": "DEBUG=NodeRed_Container:*,SnappyIONodes:* nodemon run.js",
-    "test": "DEBUG=SnappyIONodes:* gulp mocha"
+    "installRED": "npm install node-red/node-red && cd node_modules/node-red && npm i  && node_modules/.bin/grunt build",
+    "serve": "DEBUG=snappy:io:* nodemon .",
+    "test": "DEBUG=snappy:io:* gulp coverage"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SnappyRobotics/SnappyIONodes.git"
+    "url": "git+https://github.com/SnappyRobotics/snappy-io-nodes.git"
   },
   "keywords": [
     "node",
@@ -20,28 +20,34 @@
     "js",
     "robotics"
   ],
-  "author": {
-    "name": "Adarsh Belavatagi",
-    "email": "adarsh.sb18@gmail.com",
-    "url": "https://github.com/Belavatagi"
-  },
   "contributors": [
     {
       "name": "Prajankya Sonar",
       "email": "contact@prajankya.me",
       "url": "https://prajankya.me/"
+    },
+    {
+      "name": "Adarsh Belavatagi",
+      "email": "adarsh.sb18@gmail.com",
+      "url": "https://github.com/Belavatagi"
     }
   ],
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/SnappyRobotics/SnappyIONodes/issues"
+    "url": "https://github.com/SnappyRobotics/snappy-io-nodes/issues"
   },
-  "homepage": "https://github.com/SnappyRobotics/SnappyIONodes#readme",
+  "homepage": "https://github.com/SnappyRobotics/snappy-io-nodes#readme",
   "dependencies": {
-    "debug": "^2.6.1",
+    "debug": "^2.6.0",
+    "express": "^4.15.2",
+    "http": "0.0.0"
+  },
+  "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "nodemon": "^1.11.0",
-    "nodered_container": "^2.0.50"
+    "should": "^11.1.2"
   }
 }
