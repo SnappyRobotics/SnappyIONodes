@@ -11,6 +11,10 @@ describe('Testing DC Motor', function() {
     helper.unload();
   });
 
+  after(function(done) {
+    helper.stopServer(done);
+  });
+
   it('should be loaded', function(done) {
     var flow = [{
       id: "n1",
