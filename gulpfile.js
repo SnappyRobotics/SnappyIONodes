@@ -1,54 +1,47 @@
-const gulp = require('gulp');
-const mocha = require('gulp-mocha');
-const gutil = require('gulp-util');
-const path = require('path');
-const nodered_container = require('nodered_container');
+const path = require('path')
+const gulp = require('gulp')
+const mocha = require('gulp-mocha')
+const istanbul = require('gulp-istanbul')
+const coveralls = require('gulp-coveralls')
 
-const debug = require('debug')('SnappyIONodes:gulpfile');
+const debug = require('debug')('snappy:io:gulpfile')
 
-gulp.task('installRED', function(done) {
-  var dir = __dirname;
 
-  nodered_container.check(dir, function(err) {
-    if (err) {
-      throw err
-    }
-    debug("Done")
-    done()
-  });
+gulp.task('pre-test', function() {
+  return gulp.src(['nodes/**/*.js'])
+    .pipe(istanbul())
+    .pipe(istanbul.hookRequire())
+});
+
+gulp.task('mocha', ['pre-test'], function() {
+  debug("running mocha")
+  return gulp.src(['test/**/*_spec.js'], {
+      read: false
+    })
+    .pipe(mocha({
+      reporter: 'spec'
+    }))
+    .pipe(istanbul.writeReports({
+      dir: './coverage',
+      reporters: ['lcov', 'json', 'text', 'text-summary'],
+      reportOpts: {
+        dir: './coverage'
+      }
+    }))
+  // To enforce the coverage
+  // .pipe(istanbul.enforceThresholds({
+  //   thresholds: {
+  //     global: 90
+  //   }
+  // }))
 })
 
-gulp.task('watch', function() {
-  gulp.watch(['differential_drive/**', 'test/**'], ['mocha-watch'])
-});
-
-gulp.task('mocha', function(done) {
-  debug("running mocha")
-  return gulp.src(['test/**/*_spec.js'], {
-      read: false
+gulp.task('coverage', ['mocha'], function(done) {
+  debug("running coverage")
+  gulp.src('coverage/lcov.info')
+    .pipe(coveralls())
+    .on("finish", function() {
+      debug("Done coverage")
+      done()
     })
-    .pipe(mocha({
-      reporter: 'spec'
-    }))
-    .on('error', gutil.log)
-    .on('end', function() {
-      debug("mocha done")
-      done();
-      process.exit()
-      process.exit()
-    })
-});
-
-gulp.task('mocha-watch', function(done) {
-  debug("running mocha")
-  return gulp.src(['test/**/*_spec.js'], {
-      read: false
-    })
-    .pipe(mocha({
-      reporter: 'spec'
-    }))
-    .on('error', gutil.log)
-    .on('end', function() {
-      debug("mocha done")
-    })
-});
+})
