@@ -12,6 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/SnappyRobotics/snappy-io-nodes.git"
   },
+  "node-red": {
+    "nodes": {
+      "dc_motor": "nodes/dc_motor/dc_motor.js"
+    }
+  },
   "keywords": [
     "node",
     "red",
