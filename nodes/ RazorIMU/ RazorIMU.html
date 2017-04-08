@@ -1,0 +1,82 @@
+<script type="text/x-red" data-template-name="Razor IMU">
+  <div class="form-row" id="node-div-serialRow">
+    <label for="node-config-input-serialportName">
+      <i class="fa fa-random"></i> Port</label>
+    <input type="text" id="node-config-input-serialportName" style="width:60%;" placeholder="e.g. /dev/ttyUSB0  COM1" />
+    <a id="node-config-lookup-serial" class="btn">
+      <i id="node-config-lookup-serial-icon" class="fa fa-search"></i>
+    </a>
+  </div>
+
+  <div class="form-row">
+    <label for="node-input-name">
+      <i class="fa fa-tag"></i> Name
+    </label>
+    <input type="text" id="node-input-name" placeholder="Razer IMU">
+  </div>
+
+
+
+</script>
+
+<script type="text/x-red" data-help-name="Razor IMU">
+  <p>
+    To Add
+  </p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('Razor IMU', {
+    category: 'Snappy Logic',
+    defaults: {
+      name: {
+        value: ""
+      }
+    },
+    color: "#2E86C1",
+    inputs: 0,
+    outputs: 1,
+    icon: "function.png",
+    align: "right",
+    label: function() {
+      return this.name || "Razor IMU";
+    },
+    oneditprepare: function(a) {
+      var self = this;
+      console.log('startup', self);
+
+
+      try {
+        $("#node-config-input-serialportName").autocomplete("destroy");
+      } catch (err) {}
+      $("#node-config-lookup-serial").click(function() {
+        $("#node-config-lookup-serial-icon").removeClass('fa-search');
+        $("#node-config-lookup-serial-icon").addClass('spinner');
+        $("#node-config-lookup-serial").addClass('disabled');
+
+        $.getJSON('gpioserialports', function(data) {
+          $("#node-config-lookup-serial-icon").addClass('fa-search');
+          $("#node-config-lookup-serial-icon").removeClass('spinner');
+          $("#node-config-lookup-serial").removeClass('disabled');
+
+          var ports = [];
+
+          $.each(data, function(i, port) {
+            ports.push(port);
+          });
+
+          $("#node-config-input-serialportName").autocomplete({
+            source: ports,
+            minLength: 0,
+            close: function(event, ui) {
+              $("#node-config-input-serialportName").autocomplete("destroy");
+            }
+          }).autocomplete("search", "");
+        });
+      });
+
+      console.log('prepped', self);
+    }
+  });
+
+</script>

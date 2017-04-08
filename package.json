@@ -45,7 +45,8 @@
   "dependencies": {
     "debug": "^2.6.0",
     "express": "^4.15.2",
-    "http": "0.0.0"
+    "http": "0.0.0",
+    "serialport": "^4.0.7"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
