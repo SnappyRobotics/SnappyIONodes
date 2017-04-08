@@ -18,7 +18,7 @@ function networkReadyStatus(n) {
   });
 }
 
-function networkErrorStatus(n) {
+function disconnectedErrorStatus(n) {
   n.status({
     fill: "red",
     shape: "dot",
@@ -26,13 +26,20 @@ function networkErrorStatus(n) {
   });
 }
 
-function ioErrorStatus(n, err) {
+function ioErrorStatus(n) {
   n.status({
     fill: "red",
     shape: "dot",
-    text: "error"
+    text: "cannot connect to the serial port"
   });
-  n.warn(err);
+}
+
+function notConfiguredStatus(n) {
+  n.status({
+    fill: "red",
+    shape: "dot",
+    text: "serial port not configured"
+  });
 }
 
 function connectedStatus(n) {
@@ -47,8 +54,39 @@ function connectedStatus(n) {
 function init(RED) {
   function RazorIMUNode(n) {
     RED.nodes.createNode(this, n);
-    this.port = n.serialportName;
-    console.log(n)
+    var node = this;
+
+    if (n.serialportName) {
+      this.port = n.serialportName;
+      var port = new SerialPort(this.port, {
+        baudRate: 57600,
+        parser: SerialPort.parsers.readline('\n')
+      });
+
+      port.on('open', function() {
+        port.on('data', function(data) {
+          console.log('Data: ' + data);
+        });
+        connectedStatus(node);
+      })
+
+      port.on('disconnect', function() {
+        disconnectedErrorStatus(node)
+      })
+      // open errors will be emitted as an error event
+      port.on('error', function(err) {
+        console.log('Error: ', err.message);
+        ioErrorStatus(node)
+      })
+
+    } else {
+      node.error("Serial Port not configured");
+
+      notConfiguredStatus(node);
+    }
+
+    // node.board.on('error', node.error.bind(node));
+
     //var five = require("johnny-five")
 
     /*
@@ -75,6 +113,13 @@ function init(RED) {
       this.warn("nodebot not configured");
     }
     */
+
+    if (node.io && node.io.on) {
+      node.io.on('error', function(err) {
+        node.error(err);
+      });
+    }
+
   }
   RED.nodes.registerType("Razor IMU", RazorIMUNode);
 }

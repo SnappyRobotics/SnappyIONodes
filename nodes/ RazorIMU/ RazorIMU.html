@@ -1,8 +1,8 @@
 <script type="text/x-red" data-template-name="Razor IMU">
   <div class="form-row" id="node-div-serialRow">
-    <label for="node-config-input-serialportName">
+    <label for="node-input-serialportName">
       <i class="fa fa-random"></i> Port</label>
-    <input type="text" id="node-config-input-serialportName" style="width:60%;" placeholder="e.g. /dev/ttyUSB0  COM1" />
+    <input type="text" id="node-input-serialportName" style="width:60%;" required placeholder="e.g. /dev/ttyUSB0  COM1" />
     <a id="node-config-lookup-serial" class="btn">
       <i id="node-config-lookup-serial-icon" class="fa fa-search"></i>
     </a>
@@ -31,6 +31,10 @@
     defaults: {
       name: {
         value: ""
+      },
+      serialportName: {
+        type: "String",
+        required: true
       }
     },
     color: "#2E86C1",
@@ -41,13 +45,20 @@
     label: function() {
       return this.name || "Razor IMU";
     },
+    oneditsave: function() {
+      // console.log(this);
+      // this..changed
+      /*this.status = {
+        fill: "red",
+        shape: "dot",
+        text: "serial port not configured"
+      }*/
+    },
     oneditprepare: function(a) {
       var self = this;
-      console.log('startup', self);
-
 
       try {
-        $("#node-config-input-serialportName").autocomplete("destroy");
+        $("#node-input-serialportName").autocomplete("destroy");
       } catch (err) {}
       $("#node-config-lookup-serial").click(function() {
         $("#node-config-lookup-serial-icon").removeClass('fa-search');
@@ -65,17 +76,15 @@
             ports.push(port);
           });
 
-          $("#node-config-input-serialportName").autocomplete({
+          $("#node-input-serialportName").autocomplete({
             source: ports,
             minLength: 0,
             close: function(event, ui) {
-              $("#node-config-input-serialportName").autocomplete("destroy");
+              $("#node-input-serialportName").autocomplete("destroy");
             }
           }).autocomplete("search", "");
         });
       });
-
-      console.log('prepped', self);
     }
   });
 
