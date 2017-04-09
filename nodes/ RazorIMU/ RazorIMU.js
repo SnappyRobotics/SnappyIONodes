@@ -3,54 +3,13 @@ const debug = require('debug')('snappy:io:RazorIMU');
 var SerialPort = require('serialport');
 
 
-// function connectingStatus(n) {
-//   n.status({
-//     fill: "red",
-//     shape: "ring",
-//     text: "connecting ... "
-//   });
-// }
-
-// function networkReadyStatus(n) {
-//   n.status({
-//     fill: "yellow",
-//     shape: "ring",
-//     text: "connecting..."
-//   });
-// }
-
-// function disconnectedErrorStatus(n) {
-//   n.status({
-//     fill: "red",
-//     shape: "dot",
-//     text: "disconnected"
-//   });
-// }
-
-// function ioErrorStatus(n) {
-//   n.status({
-//     fill: "red",
-//     shape: "dot",
-//     text: "cannot connect to the serial port"
-//   });
-// }
-
-// function notConfiguredStatus(n) {
-//   n.status({
-//     fill: "red",
-//     shape: "dot",
-//     text: "serial port not configured"
-//   });
-// }
-
-function connectedStatus(n) {
+function ioErrorStatus(n) {
   n.status({
-    fill: "green",
+    fill: "red",
     shape: "dot",
-    text: "connected !!!! "
+    text: "cannot connect to the serial port"
   });
 }
-
 
 function init(RED) {
   function RazorIMUNode(n) {
@@ -58,58 +17,63 @@ function init(RED) {
     var node = this;
 
     if (n.serialportName) {
-      this.port = n.serialportName;
-      var port = new SerialPort(this.port, {
-        baudRate: 57600,
-        parser: SerialPort.parsers.readline('\n')
+      //   this.port = n.serialportName;
+      //   var port = new SerialPort(this.port, {
+      //     baudRate: 57600,
+      //     parser: SerialPort.parsers.readline('\n')
+      //   });
+      //
+      //   port.on('open', function() {
+      //     port.on('data', function(data) {
+      //       var d = data.substring(data.indexOf("=") + 1)
+      //       var arr = d.split(",");
+      //
+      //       for (var i = 0; i < arr.length; i++) {
+      //         arr[i] = parseFloat(arr[i].trim())
+      //       }
+      //
+      //       var o = {
+      //         yaw: arr[0],
+      //         pitch: arr[1],
+      //         roll: arr[2]
+      //       }
+      //
+      //       node.send({
+      //         topic: "",
+      //         payload: o
+      //       });
+      //     });
+      node.status({
+        fill: "green",
+        shape: "dot",
+        text: "connected"
       });
-
-      port.on('open', function() {
-        connectedStatus(node);
-
-        port.on('data', function(data) {
-          var d = data.substring(data.indexOf("=") + 1)
-          var arr = d.split(",");
-
-          for (var i = 0; i < arr.length; i++) {
-            arr[i] = parseFloat(arr[i].trim())
-          }
-
-          var o = {
-            yaw: arr[0],
-            pitch: arr[1],
-            roll: arr[2]
-          }
-
-          node.send({
-            topic: "",
-            payload: o
-          });
-        });
-        // connectedStatus(node);
-      })
-
-      port.on('disconnect', function() {
-        disconnectedErrorStatus(node)
-      })
-      // open errors will be emitted as an error event
-      port.on('error', function(err) {
-        console.log('Error: ', err.message);
-        //ioErrorStatus(node)
-      })
-
+      //   })
+      //
+      //   port.on('disconnect', function() {
+      //     // disconnectedErrorStatus(node)
+      //     node.status({
+      //       fill: "red",
+      //       shape: "ring",
+      //       text: "disconnected"
+      //     });
+      //   })
+      //   // open errors will be emitted as an error event
+      //   port.on('error', function(err) {
+      //     console.log('Error: ', err.message);
+      //
+      //     ioErrorStatus(node)
+      //   })
+      //
+      console.log("true");
     } else {
-      node.error("Serial Port not configured");
-
-      notConfiguredStatus(node);
+      console.log("error");
+      node.status({
+        fill: "yellow",
+        shape: "ring",
+        text: "disconnected"
+      });
     }
-
-    // if (node.io && node.io.on) {
-    //   node.io.on('error', function(err) {
-    //     node.error(err);
-    //   });
-    // }
-
   }
   RED.nodes.registerType("Razor IMU", RazorIMUNode);
 }
