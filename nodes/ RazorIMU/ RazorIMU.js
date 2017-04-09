@@ -42,14 +42,14 @@ var SerialPort = require('serialport');
 //     text: "serial port not configured"
 //   });
 // }
-//
-// function connectedStatus(n) {
-//   n.status({
-//     fill: "green",
-//     shape: "dot",
-//     text: "connected !!!! "
-//   });
-// }
+
+function connectedStatus(n) {
+  n.status({
+    fill: "green",
+    shape: "dot",
+    text: "connected !!!! "
+  });
+}
 
 
 function init(RED) {
@@ -65,6 +65,8 @@ function init(RED) {
       });
 
       port.on('open', function() {
+        connectedStatus(node);
+
         port.on('data', function(data) {
           var d = data.substring(data.indexOf("=") + 1)
           var arr = d.split(",");
@@ -93,13 +95,13 @@ function init(RED) {
       // open errors will be emitted as an error event
       port.on('error', function(err) {
         console.log('Error: ', err.message);
-        // ioErrorStatus(node)
+        //ioErrorStatus(node)
       })
 
     } else {
       node.error("Serial Port not configured");
 
-      // notConfiguredStatus(node);
+      notConfiguredStatus(node);
     }
 
     // if (node.io && node.io.on) {
