@@ -1,0 +1,96 @@
+<script type="text/javascript">
+	RED.nodes.registerType('dc-motor', {
+		category: 'snappy',
+		color: '#e7e7ae',
+		defaults: {
+			name: {
+				value: ""
+			},
+			gain: {
+				value: 1,
+				required: true,
+				validate: RED.validators.number()
+			}
+		},
+		inputs: 1,
+		outputs: 0,
+		icon: "dc_motor.png",
+		label: function() {
+			return this.name || "dc-motor";
+		}
+	});
+</script>
+
+<script type="text/x-red" data-template-name="dc-motor">
+	<div class="form-row">
+		<label for="node-input-name">
+			<i class="fa fa-tag"></i> Name
+		</label>
+		<input type="text" id="node-input-name" placeholder="Name">
+	</div>
+	<div class="form-row">
+		<label for="node-input-gain">
+			<i class="fa fa-location-arrow"></i> Gain
+		</label>
+		<input type="text" id="node-input-gain">
+		<br>
+		<br>
+		<div class="form-tips">
+			<b>Tip:</b> Gain can be used to control the speed.
+		</div>
+	</div>
+</script>
+
+<script type="text/x-red" data-help-name="dc-motor">
+	<p>A node which takes in JSON data to drive a motor</p>
+
+	<h3>Inputs</h3>
+	<dl class="message-properties">
+		<dt>payload
+			<span class="property-type">object</span>
+		</dt>
+
+		<br>
+		<dd> the payload of the message to be in the form: </dd>
+		<pre id="msg_format">{
+  <span class="key">"speed":</span> <span class="number">0</span>
+}</pre>
+		<br>
+		<br> Can also take in form snappy-logic-nodes/differential-drive
+		<br>of type:
+		<pre id="msg_format">{
+  <span class="key">"speed":</span> <span class="number">0</span>,
+  <span class="key">"brake":</span> <span class="boolean">true</span>
+}</pre>
+		<br> Where
+		<strong>speed</strong> is the
+		<i>velocity</i> of going forward and is in the range of
+		<b>-255</b> to
+		<b>255</b>
+		with
+		<b>0</b> being brake
+	</dl>
+
+	<style>
+		.key {
+			// color: #CC0000;
+		}
+
+		.string {
+			color: #007777;
+		}
+
+		.number {
+			color: #AA00AA;
+		}
+
+		.boolean {
+			color: #0000FF;
+		}
+
+		.null {
+			color: #0000FF;
+			font-weight: bold;
+		}
+	</style>
+</script>
