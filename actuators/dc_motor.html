@@ -6,6 +6,10 @@
 			name: {
 				value: ""
 			},
+			board: {
+				type: "nodebot",
+				required: true
+			},
 			gain: {
 				value: 1,
 				required: true,
@@ -31,6 +35,7 @@
 		inputs: 1,
 		outputs: 0,
 		icon: "dc_motor.png",
+		align: "right",
 		label: function() {
 			var node = this
 			if (node.motorType === undefined) {
@@ -74,10 +79,17 @@
 
 <script type="text/x-red" data-template-name="dc-motor">
 	<div class="form-row">
+		<label for="node-input-board">
+			<i class="fa fa-tasks"></i> Board
+		</label>
+		<input type="text" id="node-input-board">
+	</div>
+
+	<div class="form-row">
 		<label for="node-input-name">
 			<i class="fa fa-tag"></i> Name
 		</label>
-		<input type="text" id="node-input-name" placeholder="Name">
+		<input type="text" id="node-input-name" placeholder="Motor label">
 	</div>
 	<hr>
 	<div class="form-row">
@@ -86,10 +98,6 @@
 			<option value="typeA">pin A, pin B and enable pin</option>
 			<option value="typeB">direction pin and enable pin</option>
 		</select>
-		<br>
-		<br>
-		<div class="form-tips" id="mandatory_info">
-		</div>
 	</div>
 
 	<div class='typeA types'>
