@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	RED.nodes.registerType('dc-motor', {
 		category: 'snappy',
-		color: '#e7e7ae',
+		color: '#dddddd',
 		defaults: {
 			name: {
 				value: ""
@@ -10,13 +10,64 @@
 				value: 1,
 				required: true,
 				validate: RED.validators.number()
-			}
+			},
+			pinA: {
+				required: true
+			},
+			pinB: {
+				required: true
+			},
+			enablePin_A: {
+				required: true
+			},
+			dirPin: {
+				required: true
+			},
+			enablePin_B: {
+				required: true
+			},
+			motorType: {}
 		},
 		inputs: 1,
 		outputs: 0,
 		icon: "dc_motor.png",
 		label: function() {
+			var node = this
+			if (node.motorType === undefined) {
+				node.valid = false
+			}
+
 			return this.name || "dc-motor";
+		},
+		oneditprepare: function() {
+			$('#node-input-motorType').change(function() {
+				$('.types').hide()
+				$('.' + this.value).show()
+				$('.' + this.value).find('input').each(function() {
+					if ($(this).val() === "undefined") {
+						$(this).val('')
+					}
+				})
+			})
+
+			if (!this.motorType) {
+				this.motorType = 'typeA'
+			}
+
+			$('#node-input-motorType').val(this.motorType).change()
+		},
+		oneditsave: function() {
+			var node = this
+			var type = $('#node-input-motorType').val()
+
+			$('.types').each(function(e) {
+				if ($(this).hasClass(type)) {
+					return; //Dont do anything for currently selected type
+				}
+				$(this).find('input').each(function() {
+					$(this).val("undefined")
+				})
+			})
 		}
 	});
 </script>
@@ -28,6 +79,58 @@
 		</label>
 		<input type="text" id="node-input-name" placeholder="Name">
 	</div>
+	<hr>
+	<div class="form-row">
+		<label for="node-input-motorType">Motor type </label>
+		<select id="node-input-motorType">
+			<option value="typeA">pin A, pin B and enable pin</option>
+			<option value="typeB">direction pin and enable pin</option>
+		</select>
+		<br>
+		<br>
+		<div class="form-tips" id="mandatory_info">
+		</div>
+	</div>
+
+	<div class='typeA types'>
+		<div class="form-row">
+			<label for="node-input-pinA">
+				<i class="fa fa-tag"></i> pin A
+			</label>
+			<input type="text" id="node-input-pinA" placeholder="13">
+		</div>
+
+		<div class="form-row">
+			<label for="node-input-pinB">
+				<i class="fa fa-tag"></i> pin B
+			</label>
+			<input type="text" id="node-input-pinB" placeholder="12">
+		</div>
+
+		<div class="form-row">
+			<label for="node-input-enablePin_A">
+				<i class="fa fa-tag"></i> Enable pin
+			</label>
+			<input type="text" id="node-input-enablePin_A" placeholder="3">
+		</div>
+	</div>
+	<div class='typeB types'>
+		<div class="form-row">
+			<label for="node-input-dirPin">
+				<i class="fa fa-tag"></i> Direction pin
+			</label>
+			<input type="text" id="node-input-dirPin" placeholder="5">
+		</div>
+
+		<div class="form-row">
+			<label for="node-input-enablePin_B">
+				<i class="fa fa-tag"></i> Enable pin
+			</label>
+			<input type="text" id="node-input-enablePin_B" placeholder="3">
+		</div>
+	</div>
+
+	<hr>
 	<div class="form-row">
 		<label for="node-input-gain">
 			<i class="fa fa-location-arrow"></i> Gain
@@ -39,6 +142,7 @@
 			<b>Tip:</b> Gain can be used to control the speed.
 		</div>
 	</div>
+
 </script>
 
 <script type="text/x-red" data-help-name="dc-motor">
@@ -93,4 +197,32 @@
 			font-weight: bold;
 		}
 	</style>
+</script>
+5</b>
+with
+<b>0</b> being brake
+</dl>
+
+<style>
+	.key {
+		// color: #CC0000;
+	}
+
+	.string {
+		color: #007777;
+	}
+
+	.number {
+		color: #AA00AA;
+	}
+
+	.boolean {
+		color: #0000FF;
+	}
+
+	.null {
+		color: #0000FF;
+		font-weight: bold;
+	}
+</style>
 </script>

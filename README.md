@@ -1,4 +1,4 @@
-# Snappy-Logic-Nodes
+# snappy-io-nodes
 Node red nodes for IO for snappy
 
 Branch - Master : [![Build Status](https://travis-ci.org/SnappyRobotics/snappy-io-nodes.svg?branch=master)](https://travis-ci.org/SnappyRobotics/snappy-io-nodes)
