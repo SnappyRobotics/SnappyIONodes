@@ -52,23 +52,23 @@ module.exports = function(RED) {
         io.digitalWrite(config.pinB, B)
       } else if (config.motorType == "typeB") {
         var dir = 0;
-        var En = 0;
+        var En2 = 0;
         if (msg.payload.brake || parseInt(msg.payload.speed) === 0) {
-          En = 0;
+          En2 = 0;
         } else {
           if (msg.payload.speed > 0) {
-            En = constrain(msg.payload.speed);
+            En2 = constrain(msg.payload.speed);
             dir = 1;
           } else {
-            En = -constrain(msg.payload.speed) //make speed positive
+            En2 = -constrain(msg.payload.speed) //make speed positive
             dir = -1;
           }
         }
 
-        debug("En : ", En)
+        debug("En : ", En2)
         debug("dir : ", dir)
 
-        io.analogWrite(config.enablePin_B, En)
+        io.analogWrite(config.enablePin_B, En2)
         io.digitalWrite(config.dirPin, dir)
       } else {
         debug("no matching motorType found")
