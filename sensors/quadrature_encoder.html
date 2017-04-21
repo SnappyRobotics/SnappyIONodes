@@ -41,7 +41,7 @@
 				$('.types').hide()
 				$('.' + this.value).show()
 				$('.' + this.value).find('input').each(function() {
-					if ($(this).val() === "undefined") {
+					if ($(this).val() === "0") {
 						$(this).val('')
 					}
 				})
@@ -62,7 +62,7 @@
 					return; //Dont do anything for currently selected type
 				}
 				$(this).find('input').each(function() {
-					$(this).val("undefined")
+					$(this).val("0")
 				})
 			})
 		}

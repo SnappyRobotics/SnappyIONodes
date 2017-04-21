@@ -8,37 +8,57 @@ module.exports = function(RED) {
     var node = this;
     var io = null;
 
-    let waveform = '';
-    let waveformTimeout;
-    var count = 0;
+
+    var last = 0;
+    var lValue = 0;
+    var value = 0;
+    var rotation = 0;
+
+    node.position = 0;
 
     function onPress() {
-      console.log('press')
       debug('press')
     }
 
-    function handleWaveform() {
-      /*  if (waveform.length < 2) {
-          waveformTimeout = setTimeout(() => {
-            waveform = '';
-          }, 8);
-          return;
-        }
+    var processInput = function() {
+      var MSB = node.a;
+      var LSB = node.b;
+      var pos, turn;
 
-        if (waveformTimeout) {
-          clearTimeout(waveformTimeout);
-        }*/
-
-      if (waveform === '01') {
-        count++;
-      } else if (waveform === '10') {
-        count--;
+      if (LSB === 1) {
+        pos = MSB === 1 ? 0 : 1;
+      } else {
+        pos = MSB === 0 ? 2 : 3;
       }
-      debug(count)
-      node.send([{
-        payload: count
-      }]);
-      waveform = '';
+
+      turn = pos - last;
+
+      if (Math.abs(turn) !== 2) {
+        if (turn === -1 || turn === 3) {
+          value++;
+        } else if (turn === 1 || turn === -3) {
+          value--;
+        }
+      }
+
+      last = pos;
+
+      if (lValue !== value) {
+        node.emit("change", value);
+        if (config.outputType === 'typeA') {
+          node.send([{
+            payload: value
+          }])
+        } else {
+          node.send([{
+            payload: {
+              count: value
+            }
+          }])
+        }
+      }
+
+      lValue = value;
     }
 
     this.nodebot = RED.nodes.getNode(config.board);
@@ -59,22 +79,28 @@ module.exports = function(RED) {
 
         try {
           io = node.nodebot.io;
-          io.pinMode(config.pinA, io.MODES["INPUT"])
-          io.pinMode(config.pinB, io.MODES["INPUT"])
-          io.pinMode(config.pressButton, io.MODES["INPUT"])
-          io.digitalRead(config.pinA, () => {
-            debug('pin a')
-            waveform += '1';
-            handleWaveform();
+          io.pinMode(config.pinA, io.MODES["PULLUP"])
+          io.pinMode(config.pinB, io.MODES["PULLUP"])
+
+          if (config.buttonPin) {
+            io.pinMode(config.buttonPin, io.MODES["INPUT"])
+          }
+
+          io.digitalRead(config.pinA, (value) => {
+            node.a = value;
+            processInput()
           })
-          io.digitalRead(config.pinB, () => {
-            debug('pin b')
-            waveform += '0';
-            handleWaveform();
+
+          io.digitalRead(config.pinB, (value) => {
+            node.b = value;
+            processInput()
           })
-          io.digitalRead(config.pressButton, () => {
-            onPress();
-          })
+
+          if (config.buttonPin) {
+            io.digitalRead(config.buttonPin, () => {
+              onPress();
+            })
+          }
         } catch (e) {
           debug("erRr:", e)
           node.error(e)
@@ -85,21 +111,20 @@ module.exports = function(RED) {
           })
         }
       })
-
       node.nodebot.on('networkReady', function() {
         node.status({
           fill: "yellow",
           shape: "ring",
           text: "connecting..."
         })
-      });
+      })
       node.nodebot.on('networkError', function() {
         node.status({
           fill: "red",
           shape: "dot",
           text: "disconnected"
         })
-      });
+      })
       node.nodebot.on('ioError', function(err) {
         node.warn(err)
         node.status({
@@ -107,10 +132,12 @@ module.exports = function(RED) {
           shape: "dot",
           text: "error"
         })
-      });
+      })
+
     } else {
       this.warn("nodebot not configured");
     }
   }
+
   RED.nodes.registerType("quadrature-encoder", quad_EncoderNode);
 }
