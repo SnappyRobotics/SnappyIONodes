@@ -8,11 +8,15 @@ module.exports = function(RED) {
     var node = this;
     var io = null;
 
-
     var last = 0;
     var lValue = 0;
     var value = 0;
     var rotation = 0;
+    var button = false;
+
+    if (config.buttonPin) {
+      button = true
+    }
 
     node.position = 0;
 
@@ -45,17 +49,26 @@ module.exports = function(RED) {
 
       if (lValue !== value) {
         node.emit("change", value);
+        var obj = {}
         if (config.outputType === 'typeA') {
-          node.send([{
-            payload: value
-          }])
-        } else {
-          node.send([{
-            payload: {
-              count: value
-            }
-          }])
+          if (button) {
+            obj.payload = {}
+            obj.payload.count = value
+            obj.payload.button = node.button
+          } else {
+            obj.payload = value
+          }
+        } else if (config.outputType === 'typeB') {
+          obj.payload = {}
+          obj.payload.travel = config.diameter * Math.PI * (value / config.ppr)
+          obj.payload.count = value
+
+          if (button) {
+            obj.payload.button = node.button
+          }
         }
+
+        node.send([obj])
       }
 
       lValue = value;
@@ -82,7 +95,7 @@ module.exports = function(RED) {
           io.pinMode(config.pinA, io.MODES["PULLUP"])
           io.pinMode(config.pinB, io.MODES["PULLUP"])
 
-          if (config.buttonPin) {
+          if (button) {
             io.pinMode(config.buttonPin, io.MODES["INPUT"])
           }
 
@@ -96,9 +109,9 @@ module.exports = function(RED) {
             processInput()
           })
 
-          if (config.buttonPin) {
-            io.digitalRead(config.buttonPin, () => {
-              onPress();
+          if (button) {
+            io.digitalRead(config.buttonPin, (value) => {
+              node.button = value
             })
           }
         } catch (e) {
