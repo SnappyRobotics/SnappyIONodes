@@ -1,6 +1,6 @@
 {
   "name": "snappy-io-nodes",
-  "version": "0.4.326",
+  "version": "0.4.327",
   "description": "Node red nodes for io for snappy",
   "scripts": {
     "red": "DEBUG=snappy:io:* node-red",
