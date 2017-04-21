@@ -1,0 +1,128 @@
+<script type="text/javascript">
+	RED.nodes.registerType('quadrature-encoder', {
+		category: 'snappy',
+		color: '#dddddd',
+		defaults: {
+			name: {
+				value: ""
+			},
+			board: {
+				type: "nodebot",
+				required: true
+			},
+			ppr: {
+				value: 1,
+				required: true,
+				validate: RED.validators.number()
+			},
+			pinA: {
+				required: true
+			},
+			pinB: {
+				required: true
+			},
+			pressButton: {
+				required: true
+			}
+		},
+		inputs: 0,
+		outputs: 1,
+		icon: "quadrature_encoder.png",
+		label: function() {
+			var node = this
+			return this.name || "Quadrature Encoder";
+		}
+	});
+</script>
+
+<script type="text/x-red" data-template-name="quadrature-encoder">
+	<div class="form-row">
+		<label for="node-input-board">
+			<i class="fa fa-tasks"></i> Board
+		</label>
+		<input type="text" id="node-input-board">
+	</div>
+
+	<div class="form-row">
+		<label for="node-input-name">
+			<i class="fa fa-tag"></i> Name
+		</label>
+		<input type="text" id="node-input-name" placeholder="Rotary Encoder label">
+	</div>
+	<hr>
+
+	<div class='typeA types'>
+		<div class="form-row">
+			<label for="node-input-pinA">
+				<i class="fa fa-tag"></i> pin A
+			</label>
+			<input type="text" id="node-input-pinA" placeholder="13">
+		</div>
+
+		<div class="form-row">
+			<label for="node-input-pinB">
+				<i class="fa fa-tag"></i> pin B
+			</label>
+			<input type="text" id="node-input-pinB" placeholder="12">
+		</div>
+
+		<div class="form-row">
+			<label for="node-input-pressButton">
+				<i class="fa fa-tag"></i> pressButton
+			</label>
+			<input type="text" id="node-input-pressButton" placeholder="3">
+		</div>
+	</div>
+	<hr>
+
+</script>
+
+<script type="text/x-red" data-help-name="quadrature-encoder">
+	<p>A node which gives Output of quadrature-encoder rotation value as number of pulse read. </p>
+
+	<h3>config:</h3>
+	<dl class="message-properties">
+		<dt>Pin Setup
+		</dt>
+
+		<br>
+		<dd> Set quadrature encoder pins as:
+			<br>
+			<span>
+				<strong>pin A:</strong> Read pin A</span>
+			<br>
+			<span>
+				<strong>pin B:</strong> Read pin B</span>
+			<br>
+			<span>
+				<strong>pressButton:</strong> pressButton pin number</span>
+			<br>
+		</dd>
+		<br>
+		<br> Output is given as
+		<strong>pulse count</strong> in integer format.
+
+	</dl>
+	<style>
+		.key {
+			// color: #CC0000;
+		}
+
+		.string {
+			color: #007777;
+		}
+
+		.number {
+			color: #AA00AA;
+		}
+
+		.boolean {
+			color: #0000FF;
+		}
+
+		.null {
+			color: #0000FF;
+			font-weight: bold;
+		}
+	</style>
+</script>
