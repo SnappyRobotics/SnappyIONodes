@@ -24,7 +24,8 @@
   ],
   "node-red": {
     "nodes": {
-      "dc_motor": "actuators/dc_motor.js"
+      "dc_motor": "actuators/dc_motor.js",
+      "quadrature_encoder": "sensors/quadrature_encoder.js"
     }
   },
   "keywords": [

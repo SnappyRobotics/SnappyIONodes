@@ -1,72 +1,75 @@
 'use strict';
 
-const debug = require('debug')('snappy:io:dc_motor');
+const debug = require('debug')('snappy:io:dc_motor')
 
 module.exports = function(RED) {
   var dcMotorNode = function(config) {
-    RED.nodes.createNode(this, config);
-    var node = this;
-    var io = null;
+    RED.nodes.createNode(this, config)
+    var node = this
+    var io = null
 
     var constrain = function(num) {
       if (num < -255) {
-        return -255;
+        return -255
       } else if (num > 255) {
-        return 255;
+        return 255
       } else {
-        return num;
+        return num
       }
     }
 
     var processInput = function(msg) {
       if (config.motorType == "typeA") {
-        var A = 0;
-        var B = 0;
-        var En = 0;
+        var A = 0
+        var B = 0
+        var En = 0
 
         if (msg.payload.brake) { //if brake, apply brake
-          A = 1;
-          B = 1;
-          En = 0;
+          A = 1
+          B = 1
+          En = 0
         } else if (parseInt(msg.payload.speed) === 0) { // if speed is 0 and brake is not applied then just LOW both pins
-          A = 0;
-          B = 0;
-          En = 0;
+          A = 0
+          B = 0
+          En = 0
         } else {
           if (msg.payload.speed > 0) {
-            En = constrain(msg.payload.speed);
-            A = 1;
-            B = 0;
+            En = constrain(msg.payload.speed)
+            A = 1
+            B = 0
           } else {
             En = -constrain(msg.payload.speed) //make speed positive
             A = 0
             B = 1
           }
         }
-        debug("En : ", En)
-        debug("A : ", A)
-        debug("B : ", B)
+        // debug("En : ", En)
+        // debug("A : ", A)
+        // debug("B : ", B)
 
-        io.analogWrite(config.enablePin_A, En)
-        io.digitalWrite(config.pinA, A)
-        io.digitalWrite(config.pinB, B)
+        io.analogWrite(config.enablePin_A, Math.round(En2))
+        io.digitalWrite(config.pinA, (A) ? io.HIGH : io.LOW)
+        io.digitalWrite(config.pinB, (B) ? io.HIGH : io.LOW)
       } else if (config.motorType == "typeB") {
-        var dir = 0;
-        var En2 = 0;
+        var dir = 0
+        var En2 = 0
         if (msg.payload.brake || parseInt(msg.payload.speed) === 0) {
-          En2 = 0;
+          En2 = 0
         } else {
           if (msg.payload.speed > 0) {
-            En2 = constrain(msg.payload.speed);
-            dir = 1;
+            En2 = constrain(msg.payload.speed)
+            dir = 1
           } else {
             En2 = -constrain(msg.payload.speed) //make speed positive
-            dir = -1;
+            dir = 0
           }
         }
 
-        debug("En : ", En2)
-        debug("dir : ", dir)
+        En2 = Math.round(En2)
+        dir = (dir) ? io.HIGH : io.LOW
+
+        // debug("En : ", En2)
+        // debug("dir : ", dir)
 
         io.analogWrite(config.enablePin_B, En2)
         io.digitalWrite(config.dirPin, dir)
@@ -146,14 +149,16 @@ module.exports = function(RED) {
           shape: "ring",
           text: "connecting..."
         })
-      });
+      })
+
       node.nodebot.on('networkError', function() {
         node.status({
           fill: "red",
           shape: "dot",
           text: "disconnected"
         })
-      });
+      })
+
       node.nodebot.on('ioError', function(err) {
         node.warn(err)
         node.status({
@@ -161,10 +166,10 @@ module.exports = function(RED) {
           shape: "dot",
           text: "error"
         })
-      });
+      })
     } else {
-      this.warn("nodebot not configured");
+      this.warn("nodebot not configured")
     }
   }
-  RED.nodes.registerType("dc-motor", dcMotorNode);
+  RED.nodes.registerType("dc-motor", dcMotorNode)
 }
