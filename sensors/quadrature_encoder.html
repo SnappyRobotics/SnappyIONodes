@@ -3,12 +3,15 @@
 		category: 'snappy',
 		color: '#dddddd',
 		defaults: {
-			name: {
-				value: ""
-			},
 			board: {
 				type: "nodebot",
 				required: true
+			},
+			name: {
+				value: ""
+			},
+			topic: {
+				value: ""
 			},
 			pinA: {
 				required: true
@@ -82,6 +85,14 @@
 			<i class="fa fa-tag"></i> Name
 		</label>
 		<input type="text" id="node-input-name" placeholder="Quadrature Encoder label">
+	</div>
+
+
+	<div class="form-row">
+		<label for="node-input-topic">
+			<i class="fa fa-tag"></i> Topic
+		</label>
+		<input type="text" id="node-input-topic" placeholder="Topic_name">
 	</div>
 	<hr>
 

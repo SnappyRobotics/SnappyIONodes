@@ -38,3 +38,5 @@ If you want to try the latest version from github, you can install it by
 ## Nodes :
 
 ### DC Motor
+
+### Quadrature Encoder

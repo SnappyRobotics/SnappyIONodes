@@ -67,6 +67,9 @@ module.exports = function(RED) {
             obj.payload.button = node.button
           }
         }
+        if (config.topic && config.topic !== "") {
+          obj.topic = config.topic
+        }
 
         node.send([obj])
       }

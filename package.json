@@ -1,7 +1,7 @@
 {
   "name": "snappy-io-nodes",
   "version": "0.4.327",
-  "description": "Node red nodes for io for snappy",
+  "description": "Group of nodes for common sensors and actuators",
   "scripts": {
     "red": "DEBUG=snappy:io:* node-red",
     "test": "DEBUG=snappy:io:* grunt test"
