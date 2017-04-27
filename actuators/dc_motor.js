@@ -19,6 +19,7 @@ module.exports = function(RED) {
     }
 
     var processInput = function(msg) {
+      var speed = constrain(Math.round(parseInt(msg.payload.speed) * config.gain))
       if (config.motorType == "typeA") {
         var A = 0
         var B = 0
@@ -28,17 +29,17 @@ module.exports = function(RED) {
           A = 1
           B = 1
           En = 0
-        } else if (parseInt(msg.payload.speed) === 0) { // if speed is 0 and brake is not applied then just LOW both pins
+        } else if (parseInt(speed) === 0) { // if speed is 0 and brake is not applied then just LOW both pins
           A = 0
           B = 0
           En = 0
         } else {
-          if (msg.payload.speed > 0) {
-            En = constrain(msg.payload.speed)
+          if (speed > 0) {
+            En = speed
             A = 1
             B = 0
           } else {
-            En = -constrain(msg.payload.speed) //make speed positive
+            En = -speed //make speed positive
             A = 0
             B = 1
           }
@@ -47,25 +48,24 @@ module.exports = function(RED) {
         // debug("A : ", A)
         // debug("B : ", B)
 
-        io.analogWrite(config.enablePin_A, Math.round(En2))
+        io.analogWrite(config.enablePin_A, Math.round(En))
         io.digitalWrite(config.pinA, (A) ? io.HIGH : io.LOW)
         io.digitalWrite(config.pinB, (B) ? io.HIGH : io.LOW)
       } else if (config.motorType == "typeB") {
         var dir = 0
         var En2 = 0
-        if (msg.payload.brake || parseInt(msg.payload.speed) === 0) {
+        if (msg.payload.brake || parseInt(speed) === 0) {
           En2 = 0
         } else {
-          if (msg.payload.speed > 0) {
-            En2 = constrain(msg.payload.speed)
+          if (speed > 0) {
+            En2 = speed
             dir = 1
           } else {
-            En2 = -constrain(msg.payload.speed) //make speed positive
+            En2 = -speed //make speed positive
             dir = 0
           }
         }
 
-        En2 = Math.round(En2)
         dir = (dir) ? io.HIGH : io.LOW
 
         // debug("En : ", En2)

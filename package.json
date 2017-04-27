@@ -1,6 +1,6 @@
 {
   "name": "snappy-io-nodes",
-  "version": "0.4.327",
+  "version": "0.4.88",
   "description": "Group of nodes for common sensors and actuators",
   "scripts": {
     "red": "DEBUG=snappy:io:* node-red",
