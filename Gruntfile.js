@@ -40,7 +40,8 @@ module.exports = function(grunt) {
         }
       },
       all: [
-        'actuators/*.js'
+        'actuators/*.js',
+        'sensors/*.js'
       ]
     }
   })
